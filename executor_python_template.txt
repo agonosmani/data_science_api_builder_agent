@@ -1,0 +1,38 @@
+from dataclasses import dataclass
+from typing import Any, Optional
+import asyncio
+
+from pydantic import BaseModel, Field
+from pydantic_ai import Agent, RunContext
+from dotenv import load_dotenv
+import httpx
+from typing import Any
+from pydantic_ai import RunContext
+
+load_dotenv()
+
+
+# --------------------
+# Output schema
+# --------------------
+
+class ApiExecutorOutput(BaseModel):
+    response_text: str = Field(description="The response text to the user's request")
+
+
+# --------------------
+# Single agent
+# --------------------
+
+api_executor_agent = Agent(
+    "openai:gpt-4o",
+    output_type=ApiExecutorOutput,
+    system_prompt=(
+        "You are a API executor agent. You are responsible for executing the API calls and returning the response to the user."
+    ),
+)
+
+
+# --------------------
+# Tools
+# --------------------
